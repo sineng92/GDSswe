@@ -66,10 +66,14 @@ public class UserInfoController {
     }
 
     @PostMapping(path = "/upload", produces = MediaType.APPLICATION_JSON_VALUE, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<UploadDTO> uploadCsv(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<UploadDTO> uploadCsv(@RequestParam("file") MultipartFile[] file) {
         UploadDTO uploadDTO = new UploadDTO();
         try {
-            return new ResponseEntity(userInfoService.uploadCsv(file), HttpStatus.OK);
+            for(MultipartFile eachFile : file) {
+                userInfoService.uploadCsv(eachFile);
+                uploadDTO.setSuccess(Constant.upload_success);
+            }
+            return new ResponseEntity(uploadDTO, HttpStatus.OK);
         } catch (Exception e) {
             Map<String, Object> result = new HashMap<>();
             uploadDTO.setSuccess(Constant.upload_fail);
