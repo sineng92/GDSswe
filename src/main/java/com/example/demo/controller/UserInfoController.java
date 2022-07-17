@@ -27,11 +27,6 @@ public class UserInfoController {
     @Autowired
     UserInfoService userInfoService;
 
-    @GetMapping(value = "/getUserInfo", produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserInfoResDTO getUserInfo() {
-        return userInfoService.getUserInfo();
-    }
-
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserInfoResDTO> searchUser(
             @RequestParam(value = "min", defaultValue = "0.0", required = false) double min,
