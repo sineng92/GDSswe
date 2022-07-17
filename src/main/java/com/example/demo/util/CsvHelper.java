@@ -4,6 +4,7 @@ import com.example.demo.dto.UserInfoDTO;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -29,6 +30,7 @@ public class CsvHelper {
         return TYPE.equals(file.getContentType());
     }
 
+    @Async
     public static List<UserInfoDTO> getUserInfoCsv(InputStream is) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader,

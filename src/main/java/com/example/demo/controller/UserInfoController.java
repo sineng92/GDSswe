@@ -64,11 +64,7 @@ public class UserInfoController {
     public ResponseEntity<UploadDTO> uploadCsv(@RequestParam("file") MultipartFile[] file) {
         UploadDTO uploadDTO = new UploadDTO();
         try {
-            for (MultipartFile eachFile : file) {
-                userInfoService.uploadCsv(eachFile);
-                uploadDTO.setSuccess(Constant.upload_success);
-            }
-            return new ResponseEntity(uploadDTO, HttpStatus.OK);
+            return new ResponseEntity(userInfoService.uploadCsv(file),HttpStatus.OK);
         } catch (Exception e) {
             Map<String, Object> result = new HashMap<>();
             uploadDTO.setSuccess(Constant.upload_fail);

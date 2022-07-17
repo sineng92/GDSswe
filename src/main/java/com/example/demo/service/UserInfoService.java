@@ -65,22 +65,27 @@ public class UserInfoService {
     }
 
     @Transactional
-    @Async
-    public UploadDTO uploadCsv(MultipartFile file) throws Exception {
+    public UploadDTO uploadCsv(MultipartFile[] files) throws Exception {
         UploadDTO uploadDTO = new UploadDTO();
+        List<UserInfoDTO> userInfoList = new ArrayList<>();
         try {
-            if (CsvHelper.hasCSVFormat(file)) {
-                List<UserInfoDTO> userinfoList = CsvHelper.getUserInfoCsv(file.getInputStream());
-                List<UserInfo> userInfoList = dtoListToEntity(userinfoList);
-                userInfoRepository.saveAll(userInfoList);
-                uploadDTO.setSuccess(Constant.upload_success);
+            for(MultipartFile file:files){
+                if (CsvHelper.hasCSVFormat(file)) {
+                    List<UserInfoDTO> resultList = CsvHelper.getUserInfoCsv(file.getInputStream());
+                    userInfoList.addAll(resultList);
+                }
             }
+            List<UserInfo> userInfoEntityList = dtoListToEntity(userInfoList);
+            userInfoRepository.saveAll(userInfoEntityList);
+            uploadDTO.setSuccess(Constant.upload_success);
         } catch (Exception e) {
             logger.error("uploadCsv failed: " + e);
             throw e;
         }
         return uploadDTO;
     }
+
+
 
     public boolean allowedSort(String sort) {
         ArrayList<String> headers = new ArrayList<>();
