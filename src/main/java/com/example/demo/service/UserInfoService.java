@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,6 +65,7 @@ public class UserInfoService {
     }
 
     @Transactional
+    @Async
     public UploadDTO uploadCsv(MultipartFile file) throws Exception {
         UploadDTO uploadDTO = new UploadDTO();
         try {
@@ -77,7 +79,6 @@ public class UserInfoService {
             logger.error("uploadCsv failed: " + e);
             throw e;
         }
-
         return uploadDTO;
     }
 

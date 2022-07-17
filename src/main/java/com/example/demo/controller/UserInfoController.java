@@ -69,7 +69,7 @@ public class UserInfoController {
     public ResponseEntity<UploadDTO> uploadCsv(@RequestParam("file") MultipartFile[] file) {
         UploadDTO uploadDTO = new UploadDTO();
         try {
-            for(MultipartFile eachFile : file) {
+            for (MultipartFile eachFile : file) {
                 userInfoService.uploadCsv(eachFile);
                 uploadDTO.setSuccess(Constant.upload_success);
             }
