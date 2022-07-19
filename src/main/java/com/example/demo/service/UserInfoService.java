@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Type;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,8 @@ public class UserInfoService {
 
     @Transactional
     public UploadDTO uploadCsv(MultipartFile[] files) throws Exception {
+        logger.info("upload start time: " + new Timestamp(System.currentTimeMillis()));
+
         UploadDTO uploadDTO = new UploadDTO();
         List<UserInfo> userInfoList = new ArrayList<>();
         try {
@@ -66,7 +69,9 @@ public class UserInfoService {
             logger.error("uploadCsv failed: " + e);
             throw e;
         }
+        logger.info("upload end time: " + new Timestamp(System.currentTimeMillis()));
         return uploadDTO;
+
     }
 
     public boolean allowedSort(String sort) {

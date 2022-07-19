@@ -1,6 +1,5 @@
 package com.example.demo.util;
 
-import com.example.demo.dto.UserInfoDTO;
 import com.example.demo.entity.UserInfo;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
