@@ -129,7 +129,7 @@ class UserInfoControllerTest {
     void searchUserThrowServiceException() {
         Mockito.when(userInfoService.searchUser(0, 4000, PageRequest.of(0, 2147483647))).thenThrow(new ServiceException("exception"));
         try {
-            var content = mockMvc.perform(MockMvcRequestBuilders
+            mockMvc.perform(MockMvcRequestBuilders
                             .get("/users?min=0&max=4000&offset=0&limit=0&sort=test")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON))
@@ -143,7 +143,7 @@ class UserInfoControllerTest {
     void searchUserThrowMethodException() {
         //pass in parameter with wrong data type. eg max = A
         try {
-            var content = mockMvc.perform(MockMvcRequestBuilders
+            mockMvc.perform(MockMvcRequestBuilders
                             .get("/users?min=0&max=A&offset=0&limit=0&sort=test")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON))
@@ -159,7 +159,7 @@ class UserInfoControllerTest {
         MockMultipartFile sampleFile = new MockMultipartFile(
                 "file",
                 fileName,
-                "text/plain",
+                "text/csv",
                 "This is the file content".getBytes());
 
         MockMultipartHttpServletRequestBuilder multipartRequest =
@@ -174,7 +174,7 @@ class UserInfoControllerTest {
         MockMultipartFile sampleFile = new MockMultipartFile(
                 "file",
                 fileName,
-                "text/plain",
+                "text/csv",
                 "This is the file content".getBytes());
 
         Mockito.when(userInfoService.uploadCsv(any())).thenThrow(new Exception());
