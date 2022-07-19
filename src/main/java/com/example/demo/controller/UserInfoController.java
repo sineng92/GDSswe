@@ -53,7 +53,8 @@ public class UserInfoController {
             } else {
                 pageable = PageRequest.of(offset, limit);
             }
-            return new ResponseEntity(userInfoService.searchUser(min, max, pageable), HttpStatus.OK);
+            var result = userInfoService.searchUser(min, max, pageable);
+            return new ResponseEntity(result, HttpStatus.OK);
         } catch (Exception e) {
             throw new ServiceException(e.getMessage());
         }
@@ -64,7 +65,7 @@ public class UserInfoController {
     public ResponseEntity<UploadDTO> uploadCsv(@RequestParam("file") MultipartFile[] file) {
         UploadDTO uploadDTO = new UploadDTO();
         try {
-            return new ResponseEntity(userInfoService.uploadCsv(file),HttpStatus.OK);
+            return new ResponseEntity(userInfoService.uploadCsv(file), HttpStatus.OK);
         } catch (Exception e) {
             Map<String, Object> result = new HashMap<>();
             uploadDTO.setSuccess(Constant.upload_fail);

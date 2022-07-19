@@ -27,7 +27,7 @@ public class CustomizedExceptionHandling {
     }
 
 
-    @ExceptionHandler({MethodArgumentNotValidException.class, MethodArgumentTypeMismatchException.class, MissingServletRequestPartException.class})
+    @ExceptionHandler({MethodArgumentNotValidException.class, MethodArgumentTypeMismatchException.class, MissingServletRequestPartException.class, Exception.class})
     public ResponseEntity<Object> handleException(Exception e, HttpServletRequest request) {
         ExceptionResponse response = new ExceptionResponse();
         response.setError(e.getMessage());

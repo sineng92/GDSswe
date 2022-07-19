@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,15 +30,6 @@ public class UserInfoService {
     Logger logger = LoggerFactory.getLogger(UserInfoService.class);
     @Autowired
     private ModelMapper modelMapper;
-
-    public UserInfoResDTO getUserInfo() {
-        List<UserInfo> userInfo = userInfoRepository.findAll();
-        List<UserInfoDTO> userInfoList = entityToDtoList(userInfo);
-        UserInfoResDTO userInfoResDTO = new UserInfoResDTO();
-        userInfoResDTO.setResult(userInfoList);
-
-        return userInfoResDTO;
-    }
 
     public UserInfoResDTO searchUser(double min, double max, Pageable pageable) {
         UserInfoResDTO userInfoResDTO = new UserInfoResDTO();
@@ -59,24 +49,18 @@ public class UserInfoService {
         return modelMapper.map(userInfo, listType);
     }
 
-    private List<UserInfo> dtoListToEntity(List<UserInfoDTO> userInfoDTO) {
-        Type listType = new TypeToken<List<UserInfo>>() {}.getType();
-        return modelMapper.map(userInfoDTO, listType);
-    }
-
     @Transactional
     public UploadDTO uploadCsv(MultipartFile[] files) throws Exception {
         UploadDTO uploadDTO = new UploadDTO();
-        List<UserInfoDTO> userInfoList = new ArrayList<>();
+        List<UserInfo> userInfoList = new ArrayList<>();
         try {
-            for(MultipartFile file:files){
+            for (MultipartFile file : files) {
                 if (CsvHelper.hasCSVFormat(file)) {
-                    List<UserInfoDTO> resultList = CsvHelper.getUserInfoCsv(file.getInputStream());
+                    List<UserInfo> resultList = CsvHelper.getUserInfoCsv(file.getInputStream());
                     userInfoList.addAll(resultList);
                 }
             }
-            List<UserInfo> userInfoEntityList = dtoListToEntity(userInfoList);
-            userInfoRepository.saveAll(userInfoEntityList);
+            userInfoRepository.saveAll(userInfoList);
             uploadDTO.setSuccess(Constant.upload_success);
         } catch (Exception e) {
             logger.error("uploadCsv failed: " + e);
@@ -84,8 +68,6 @@ public class UserInfoService {
         }
         return uploadDTO;
     }
-
-
 
     public boolean allowedSort(String sort) {
         ArrayList<String> headers = new ArrayList<>();

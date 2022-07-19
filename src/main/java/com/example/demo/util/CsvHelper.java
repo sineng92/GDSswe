@@ -1,6 +1,7 @@
 package com.example.demo.util;
 
 import com.example.demo.dto.UserInfoDTO;
+import com.example.demo.entity.UserInfo;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -31,11 +32,11 @@ public class CsvHelper {
     }
 
     @Async
-    public static List<UserInfoDTO> getUserInfoCsv(InputStream is) {
+    public static List<UserInfo> getUserInfoCsv(InputStream is) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader,
                      CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
-            List<UserInfoDTO> userInfoDTOList = new ArrayList<>();
+            List<UserInfo> userInfoDTOList = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
             if (csvParser.getHeaderMap().size() > 2) {
                 throw new RuntimeException("There is an extra column in the csv");
@@ -45,10 +46,10 @@ public class CsvHelper {
                     for (CSVRecord csvRecord : csvRecords) {
                         double salary = Double.parseDouble(csvRecord.get("Salary"));
                         if (salary > 0) {
-                            UserInfoDTO userInfoDTO = new UserInfoDTO();
-                            userInfoDTO.setName(csvRecord.get("Name"));
-                            userInfoDTO.setSalary(salary);
-                            userInfoDTOList.add(userInfoDTO);
+                            UserInfo userInfo = new UserInfo();
+                            userInfo.setName(csvRecord.get("Name"));
+                            userInfo.setSalary(salary);
+                            userInfoDTOList.add(userInfo);
                         }
                     }
                 } else {
